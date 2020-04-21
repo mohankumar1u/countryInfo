@@ -3,13 +3,8 @@ import "./styles.css";
 import "./components/HomePage";
 import HomePage from "./components/HomePage";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import store from "./store/store";
 
-function reducer() {
-  console.log(this.state);
-  return "working";
-}
-const store = createStore(reducer);
 export default function App() {
   return (
     <div className="App">

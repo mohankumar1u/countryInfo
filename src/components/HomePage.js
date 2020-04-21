@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import Cards from "./cards";
-import { Provider } from "react-redux";
-import { createStore } from "redux";
-import Reducer from "../store/reducer";
+import { connect } from "react-redux";
+import loadData from "../store/action";
+import "./HomePage.css";
 
 class HomePage extends Component {
   state = {
@@ -13,6 +13,7 @@ class HomePage extends Component {
     await fetch("https://restcountries.eu/rest/v2/all")
       .then(res => res.json())
       .then(result => {
+        this.props.loadData(result);
         this.setState({
           data: result
         });
@@ -20,16 +21,29 @@ class HomePage extends Component {
   }
 
   render() {
-    const store = createStore(Reducer, this.state);
+    let cards = Object.entries(this.props.cardDetails).map(([key, value]) => {
+      return <Cards value={value} key={key} />;
+    });
     return (
-      <div>
-        <Provider store={store}>
-          {console.log("store", store.getState())}
-          <Cards />
-        </Provider>
+      <div class="home">
+        <div class="cardsHoalder">
+          {cards}
+          {console.log("store", this.props.cardDetails)}
+        </div>
       </div>
     );
   }
 }
+const mapStateToProps = state => ({
+  cardDetails: state
+});
+const mapDispatchToProps = dispatch => {
+  return {
+    loadData: data => dispatch(loadData(data))
+  };
+};
 
-export default HomePage;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomePage);
