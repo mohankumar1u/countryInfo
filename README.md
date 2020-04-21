@@ -1,2 +1,0 @@
-# countryInfo
-Created with CodeSandbox
